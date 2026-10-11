@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+
+  haproxy:
+    image: haproxy:latest
+    ports:
+      - "80:80"
+      - "3306:3306"
+      - "8404:8404"
+    configs:
+      - source: haproxy_config
+        target: /usr/local/etc/haproxy/haproxy.cfg
+    networks:
+      - galera_net
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.labels.role == balancer
+      restart_policy:
+        condition: on-failure
+
+  mariadb-1:
+    image: mariadb:10.11
+    environment:
+      MYSQL_ROOT_PASSWORD: tu_password_root_seguro
+    volumes:
+      - /home/ed/db_data:/var/lib/mysql
+    configs:
+      - source: galera_config
+        target: /etc/mysql/mariadb.conf.d/galera.cnf
+    networks:
+      - galera_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.role == database
+          - node.hostname == gal1
+      restart_policy:
+        condition: on-failure
+    command: ["mariadbd", "--wsrep-new-cluster"]
+
+  mariadb-2:
+    image: mariadb:10.11
+    environment:
+      MYSQL_ROOT_PASSWORD: tu_password_root_seguro
+    volumes:
+      - /home/ed/db_data:/var/lib/mysql
+    configs:
+      - source: galera_config
+        target: /etc/mysql/mariadb.conf.d/galera.cnf
+    networks:
+      - galera_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.role == database
+          - node.hostname == gal2
+      restart_policy:
+        condition: on-failure
+    command: ["mariadbd", "--wsrep-cluster-address=gcomm://mariadb-1"]
+
+  mariadb-3:
+    image: mariadb:10.11
+    environment:
+      MYSQL_ROOT_PASSWORD: tu_password_root_seguro
+    volumes:
+      - /home/ed/db_data:/var/lib/mysql
+    configs:
+      - source: galera_config
+        target: /etc/mysql/mariadb.conf.d/galera.cnf
+    networks:
+      - galera_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.role == database
+          - node.hostname == gal3
+      restart_policy:
+        condition: on-failure
+    command: ["mariadbd", "--wsrep-cluster-address=gcomm://mariadb-1"]
+
+networks:
+  galera_net:
+    driver: overlay
+
+configs:
+  haproxy_config:
+    file: ./haproxy.cfg
+  galera_config:
+    file: ./galera.cnf    
+
