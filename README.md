@@ -12,3 +12,26 @@ sudo chmod +x generar-docker-compose.sh
 
 
 ```
+
+> Luego de ejecutar el script tendras el docker-compose.yml inicial. Te toca hacer un 
+
+
+```bash
+
+docker stack deploy -c docker-compose.yml mi_cluster
+
+
+```
+
+> Esto levantara la fase inicial, y tendras el balanceador gal1 funcionando. Luego de eso tendras que hacer de nuevo 
+
+
+```bash
+
+./generar-docker-compose.sh
+
+
+
+```
+
+> Para activar la fase 2, y luego de esperar un rato levantar el resto de los mariadb gal2 y gal3
