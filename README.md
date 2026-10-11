@@ -44,3 +44,5 @@ docker stack deploy -c docker-compose.yml mi_cluster
 
 ```
 
+
+> Mas detalle de esto en [aca](https://terli.wordpress.com/2026/10/11/docker-swarm-entre-5-equipos-virtuales-en-donde-2-son-balanceadores-de-carga-con-haproxy-y-3-equipos-son-mariadb-para-un-cluster-de-galera/)
