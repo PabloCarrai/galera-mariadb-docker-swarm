@@ -34,4 +34,13 @@ docker stack deploy -c docker-compose.yml mi_cluster
 
 ```
 
-> Para activar la fase 2, y luego de esperar un rato levantar el resto de los mariadb gal2 y gal3
+> Para activar la fase 2, y luego de esperar un rato levantar el resto de los mariadb gal2 y gal3. Y por ultimo una vez mas esto. 
+
+
+```bash
+
+docker stack deploy -c docker-compose.yml mi_cluster
+
+
+```
+
