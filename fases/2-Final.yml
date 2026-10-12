@@ -40,7 +40,7 @@ services:
           - node.hostname == gal1
       restart_policy:
         condition: on-failure
-    command: ["mariadbd", "--wsrep-new-cluster"]
+    command: ["mariadbd", "--wsrep-cluster-address=gcomm://mariadb-1,mariadb-2,mariadb-3"]
 
   mariadb-2:
     image: mariadb:10.11
@@ -61,7 +61,7 @@ services:
           - node.hostname == gal2
       restart_policy:
         condition: on-failure
-    command: ["mariadbd", "--wsrep-cluster-address=gcomm://mariadb-1"]
+    command: ["mariadbd", "--wsrep-cluster-address=gcomm://mariadb-1,mariadb-2,mariadb-3"]
 
   mariadb-3:
     image: mariadb:10.11
@@ -82,7 +82,7 @@ services:
           - node.hostname == gal3
       restart_policy:
         condition: on-failure
-    command: ["mariadbd", "--wsrep-cluster-address=gcomm://mariadb-1"]
+    command: ["mariadbd", "--wsrep-cluster-address=gcomm://mariadb-1,mariadb-2,mariadb-3"]
 
 networks:
   galera_net:
@@ -92,5 +92,4 @@ configs:
   haproxy_config:
     file: ./haproxy.cfg
   galera_config:
-    file: ./galera.cnf    
-
+    file: ./galera.cnf
